@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Consultas Médicas</title>
+    <style>
+        /* Estilo Global */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 10px 0;
+            background-color: #333;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 30%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Estilos para a tela de login */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .login-box {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .login-box button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <h2>Login do Médico</h2>
+            <form id="login-form" onsubmit="login(event)">
+                <input type="text" id="medico-nome" placeholder="Nome do Médico" required>
+                <input type="password" id="medico-senha" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal (Após login) -->
+    <div id="main-content" style="display: none;">
+        <header>
+            <h1>Gestão de Consultas Médicas</h1>
+        </header>
+        <nav>
+            <ul>
+                <li><a onclick="mostrarSeção('dashboard')">Dashboard</a></li>
+                <li><a onclick="mostrarSeção('medicos')">Médicos</a></li>
+                <li><a onclick="mostrarSeção('consultas')">Consultas</a></li>
+                <li><a onclick="mostrarSeção('pacientes')">Pacientes</a></li>
+            </ul>
+        </nav>
+
+        <!-- Seção de Dashboard -->
+        <section id="dashboard" class="section">
+            <h2>Dashboard</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>Médicos</h3>
+                    <p id="num-medicos">Carregando...</p>
+                </div>
+                <div class="card">
+                    <h3>Pacientes</h3>
+                    <p id="num-pacientes">Carregando...</p>
+                </div>
+                <div class="card">
+                    <h3>Consultas</h3>
+                    <p id="num-consultas">Carregando...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Médicos -->
+        <section id="medicos" class="section">
+            <h2>Médicos Cadastrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Especialidade</th>
+                        <th>Consultas Realizadas</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-medicos">
+                    <!-- Dados inseridos dinamicamente -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Seção de Consultas -->
+        <section id="consultas" class="section">
+            <h2>Consultas Agendadas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Médico</th>
+                        <th>Paciente</th>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-consultas">
+                    <!-- Dados inseridos dinamicamente -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Seção de Pacientes -->
+        <section id="pacientes" class="section">
+            <h2>Pacientes Cadastrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Gênero</th>
+                        <th>Idade</th>
+                        <th>Consultas Realizadas</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-pacientes">
+                    <!-- Dados inseridos dinamicamente -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        // Dados de médicos e usuários para simulação de login
+        const dados = {
+            medicos: [
+                { nome: "Dr. João", especialidade: "Cardiologia", consultas: 50, senha: "12345" },
+                { nome: "Dra. Maria", especialidade: "Pediatria", consultas: 40, senha: "abcde" },
+                { nome: "Dr. Pedro", especialidade: "Dermatologia", consultas: 30, senha: "senha123" },
+            ],
+            pacientes: [
+                { nome: "Ana Silva", genero: "F", idade: 29, consultas: 3 },
+                { nome: "Carlos Souza", genero: "M", idade: 45, consultas: 5 },
+                { nome: "Mariana Costa", genero: "F", idade: 18, consultas: 2 },
+            ],
+            consultas: [
+                { medico: "Dr. João", paciente: "Ana Silva", data: "2024-10-20", horario: "10:00", status: "Agendada" },
+                { medico: "Dra. Maria", paciente: "Carlos Souza", data: "2024-10-20", horario: "11:00", status: "Realizada" },
+                { medico: "Dr. Pedro", paciente: "Mariana Costa", data: "2024-10-21", horario: "09:00", status: "Cancelada" },
+            ]
+        };
+
+        // Função de login
+        function login(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById("medico-nome").value;
+            const senha = document.getElementById("medico-senha").value;
+
+            const medicoEncontrado = dados.medicos.find(medico => medico.nome === nome && medico.senha === senha);
+
+            if (medicoEncontrado) {
+                document.getElementById("login-page").style.display = "none";
+                document.getElementById("main-content").style.display = "block";
+                atualizarDashboard();
+                preencherTabelaMedicos();
+                preencherTabelaConsultas();
+                preencherTabelaPacientes();
+                mostrarSeção('dashboard'); // Exibe o Dashboard inicialmente
+            } else {
+                alert("Nome ou senha incorretos. Tente novamente.");
+            }
+        }
+
+        // Função para exibir seções
+        function mostrarSeção(seção) {
+            const seções = document.querySelectorAll('.section');
+            seções.forEach(secao => secao.classList.remove('active'));
+            document.getElementById(seção).classList.add('active');
+        }
+
+        // Função para atualizar o Dashboard
+        function atualizarDashboard() {
+            document.getElementById("num-medicos").innerText = dados.medicos.length;
+            document.getElementById("num-pacientes").innerText = dados.pacientes.length;
+            document.getElementById("num-consultas").innerText = dados.consultas.length;
+        }
+
+        // Função para preencher a tabela de médicos
+        function preencherTabelaMedicos() {
+            const tabela = document.getElementById("tabela-medicos");
+            tabela.innerHTML = "";
+            dados.medicos.forEach(medico => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${medico.nome}</td><td>${medico.especialidade}</td><td>${medico.consultas}</td>`;
+                tabela.appendChild(tr);
+            });
+        }
+
+        // Função para preencher a tabela de consultas
+        function preencherTabelaConsultas() {
+            const tabela = document.getElementById("tabela-consultas");
+            tabela.innerHTML = "";
+            dados.consultas.forEach(consulta => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${consulta.medico}</td><td>${consulta.paciente}</td><td>${consulta.data}</td><td>${consulta.horario}</td><td>${consulta.status}</td>`;
+                tabela.appendChild(tr);
+            });
+        }
+
+        // Função para preencher a tabela de pacientes
+        function preencherTabelaPacientes() {
+            const tabela = document.getElementById("tabela-pacientes");
+            tabela.innerHTML = "";
+            dados.pacientes.forEach(paciente => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${paciente.nome}</td><td>${paciente.genero}</td><td>${paciente.idade}</td><td>${paciente.consultas}</td>`;
+                tabela.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
